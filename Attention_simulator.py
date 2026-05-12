@@ -4,7 +4,7 @@ import pandas as pd
 
 st.set_page_config(
     page_title="Attention 메커니즘 시뮬레이터",
-    page_icon="🧠",
+    page_icon="",
     layout="wide",
 )
 
@@ -28,24 +28,24 @@ Wv = np.array([[0.4, 0.7], [0.3, -0.2], [0.8, 0.1], [-0.1, 0.6]])
 dk = np.sqrt(2)
 
 # ─── Header ───────────────────────────────────────────────────────────────────
-st.markdown("## 🧠 Attention 메커니즘 시뮬레이터")
+st.markdown("## Attention 메커니즘 시뮬레이터")
 st.caption("Scaled Dot-Product Attention · 단계별 인터랙티브 학습")
 st.info("**Attention(Q, K, V) = softmax( Q·Kᵀ / √dₖ ) · V**")
 st.divider()
 
 # ─── Sidebar ──────────────────────────────────────────────────────────────────
 with st.sidebar:
-    st.header("⚙️ 설정")
+    st.header("설정")
 
     query_idx = st.selectbox(
-        "🔍 쿼리 토큰 선택",
+        "쿼리 토큰 선택",
         options=range(4),
         format_func=lambda i: f"★ {TOKENS[i]}",
         index=0,
     )
 
     st.divider()
-    st.subheader("📐 가중치 행렬 커스텀")
+    st.subheader("가중치 행렬 커스텀")
     wq_00 = st.slider("Wq[0,0]", -1.0, 1.0, float(Wq[0, 0]), 0.05,
                       help="Query 행렬의 첫 번째 가중치")
     wk_00 = st.slider("Wk[0,0]", -1.0, 1.0, float(Wk[0, 0]), 0.05,
@@ -63,7 +63,7 @@ with st.sidebar:
     output  = weights @ V_c
 
     st.divider()
-    st.subheader("📊 Attention 가중치")
+    st.subheader("Attention 가중치")
     weight_df = pd.DataFrame({"가중치": weights}, index=TOKENS)
     st.bar_chart(weight_df, color="#3b82f6", height=200)
     for tok, w in zip(TOKENS, weights):
@@ -157,7 +157,7 @@ with tab2:
                 st.markdown(f"🟣 **K** = `[{K_c[i][0]:.3f}, {K_c[i][1]:.3f}]`")
                 st.markdown(f"🟢 **V** = `[{V_c[i][0]:.3f}, {V_c[i][1]:.3f}]`")
 
-    with st.expander("💡 Q / K / V 개념 설명"):
+    with st.expander("Q / K / V 개념 설명"):
         st.markdown("""
         - 🔵 **Q (Query)**: "내가 무엇을 찾고 있는가?" — 검색 쿼리
         - 🟣 **K (Key)**: "내가 어떤 정보를 갖고 있는가?" — 색인 키
@@ -196,9 +196,9 @@ with tab3:
         st.bar_chart(score_chart_df, color="#f87171", height=260)
 
     best = int(np.argmax(scores))
-    st.success(f"🔥 가장 높은 Score: **{TOKENS[best]}** ({scores[best]:.4f})")
+    st.success(f"가장 높은 Score: **{TOKENS[best]}** ({scores[best]:.4f})")
 
-    with st.expander("💡 왜 √dₖ 로 나누나요?"):
+    with st.expander("왜 √dₖ 로 나누나요?"):
         st.markdown(f"""
         차원 dₖ가 커질수록 Q·K 내적값이 커져서 softmax 출력이 한 쪽으로 몰립니다 (기울기 소실).
         √dₖ = **{dk:.4f}** 로 나눠 스케일을 조정합니다.
@@ -254,7 +254,7 @@ with tab4:
     )
     st.info(f"현재 쿼리 **{TOKENS[query_idx]}** 행을 주목하세요.")
 
-    with st.expander("💡 Softmax 공식"):
+    with st.expander("Softmax 공식"):
         st.latex(r"\text{softmax}(x_i) = \frac{e^{x_i}}{\sum_j e^{x_j}}")
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -285,7 +285,7 @@ with tab5:
                      color="#a78bfa", height=220)
 
     st.divider()
-    st.subheader(f"🎯 최종 출력 Z — \"{TOKENS[query_idx]}\"")
+    st.subheader(f"최종 출력 Z — \"{TOKENS[query_idx]}\"")
     best = int(np.argmax(weights))
     oc1, oc2, oc3 = st.columns(3)
     with oc1: st.metric("Z[0]", f"{output[0]:.4f}")
@@ -293,7 +293,7 @@ with tab5:
     with oc3: st.metric("가장 주목한 토큰", TOKENS[best], f"{weights[best]*100:.1f}%")
 
     st.divider()
-    st.subheader("📋 전체 계산 요약")
+    st.subheader("전체 계산 요약")
     summary_df = pd.DataFrame({
         "Score": scores,
         "Weight": weights,
@@ -309,7 +309,7 @@ with tab5:
         height=212,
     )
 
-    with st.expander("💡 최종 해석"):
+    with st.expander("최종 해석"):
         st.markdown(f"""
         **"{TOKENS[query_idx]}"** 의 출력 벡터 Z는 문장 내 모든 토큰의 V를
         attention weight로 **가중합산**한 결과입니다.
