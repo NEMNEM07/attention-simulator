@@ -375,7 +375,7 @@ with tab3:
             marker=dict(
                 color=scores,
                 colorscale=[[0, "#1a2540"], [0.5, "#7f1d1d"], [1, "#f87171"]],
-                line=dict(color="#f8717188", width=1),
+                line=dict(color="#f87171", width=1),  # ← 투명도 제거
             ),
             text=[f"{s:.4f}" for s in scores],
             textposition="outside",
